@@ -774,4 +774,1465 @@ export const getGetRafflesQueryOptions = <
   options?: {
     query?: UseQueryOptions<
       Awaited<ReturnType<typeof getRaffles>>,
-   
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetRafflesQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getRaffles>>> = ({
+    signal,
+  }) => getRaffles(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getRaffles>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetRafflesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRaffles>>
+>;
+export type GetRafflesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all raffles
+ */
+
+export function useGetRaffles<
+  TData = Awaited<ReturnType<typeof getRaffles>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetRafflesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRaffles>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetRafflesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a new raffle
+ */
+export const getCreateRaffleUrl = () => {
+  return `/api/raffles`;
+};
+
+export const createRaffle = async (
+  createRaffleRequest: CreateRaffleRequest,
+  options?: RequestInit,
+): Promise<Raffle> => {
+  return customFetch<Raffle>(getCreateRaffleUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createRaffleRequest),
+  });
+};
+
+export const getCreateRaffleMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createRaffle>>,
+    TError,
+    { data: BodyType<CreateRaffleRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createRaffle>>,
+  TError,
+  { data: BodyType<CreateRaffleRequest> },
+  TContext
+> => {
+  const mutationKey = ["createRaffle"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createRaffle>>,
+    { data: BodyType<CreateRaffleRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createRaffle(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateRaffleMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createRaffle>>
+>;
+export type CreateRaffleMutationBody = BodyType<CreateRaffleRequest>;
+export type CreateRaffleMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a new raffle
+ */
+export const useCreateRaffle = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createRaffle>>,
+    TError,
+    { data: BodyType<CreateRaffleRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createRaffle>>,
+  TError,
+  { data: BodyType<CreateRaffleRequest> },
+  TContext
+> => {
+  return useMutation(getCreateRaffleMutationOptions(options));
+};
+
+/**
+ * @summary Get a raffle by ID
+ */
+export const getGetRaffleUrl = (id: number) => {
+  return `/api/raffles/${id}`;
+};
+
+export const getRaffle = async (
+  id: number,
+  options?: RequestInit,
+): Promise<Raffle> => {
+  return customFetch<Raffle>(getGetRaffleUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetRaffleQueryKey = (id: number) => {
+  return [`/api/raffles/${id}`] as const;
+};
+
+export const getGetRaffleQueryOptions = <
+  TData = Awaited<ReturnType<typeof getRaffle>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRaffle>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetRaffleQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getRaffle>>> = ({
+    signal,
+  }) => getRaffle(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getRaffle>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetRaffleQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRaffle>>
+>;
+export type GetRaffleQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get a raffle by ID
+ */
+
+export function useGetRaffle<
+  TData = Awaited<ReturnType<typeof getRaffle>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRaffle>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetRaffleQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Enter a raffle
+ */
+export const getEnterRaffleUrl = (id: number) => {
+  return `/api/raffles/${id}/enter`;
+};
+
+export const enterRaffle = async (
+  id: number,
+  enterRaffleBody: EnterRaffleBody,
+  options?: RequestInit,
+): Promise<RaffleEntry> => {
+  return customFetch<RaffleEntry>(getEnterRaffleUrl(id), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(enterRaffleBody),
+  });
+};
+
+export const getEnterRaffleMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof enterRaffle>>,
+    TError,
+    { id: number; data: BodyType<EnterRaffleBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof enterRaffle>>,
+  TError,
+  { id: number; data: BodyType<EnterRaffleBody> },
+  TContext
+> => {
+  const mutationKey = ["enterRaffle"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof enterRaffle>>,
+    { id: number; data: BodyType<EnterRaffleBody> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return enterRaffle(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type EnterRaffleMutationResult = NonNullable<
+  Awaited<ReturnType<typeof enterRaffle>>
+>;
+export type EnterRaffleMutationBody = BodyType<EnterRaffleBody>;
+export type EnterRaffleMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Enter a raffle
+ */
+export const useEnterRaffle = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof enterRaffle>>,
+    TError,
+    { id: number; data: BodyType<EnterRaffleBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof enterRaffle>>,
+  TError,
+  { id: number; data: BodyType<EnterRaffleBody> },
+  TContext
+> => {
+  return useMutation(getEnterRaffleMutationOptions(options));
+};
+
+/**
+ * @summary List all auctions
+ */
+export const getGetAuctionsUrl = (params?: GetAuctionsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/auctions?${stringifiedParams}`
+    : `/api/auctions`;
+};
+
+export const getAuctions = async (
+  params?: GetAuctionsParams,
+  options?: RequestInit,
+): Promise<Auction[]> => {
+  return customFetch<Auction[]>(getGetAuctionsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetAuctionsQueryKey = (params?: GetAuctionsParams) => {
+  return [`/api/auctions`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetAuctionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAuctions>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAuctionsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAuctions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAuctionsQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuctions>>> = ({
+    signal,
+  }) => getAuctions(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAuctions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAuctionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAuctions>>
+>;
+export type GetAuctionsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all auctions
+ */
+
+export function useGetAuctions<
+  TData = Awaited<ReturnType<typeof getAuctions>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAuctionsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAuctions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAuctionsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a new auction
+ */
+export const getCreateAuctionUrl = () => {
+  return `/api/auctions`;
+};
+
+export const createAuction = async (
+  createAuctionRequest: CreateAuctionRequest,
+  options?: RequestInit,
+): Promise<Auction> => {
+  return customFetch<Auction>(getCreateAuctionUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createAuctionRequest),
+  });
+};
+
+export const getCreateAuctionMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAuction>>,
+    TError,
+    { data: BodyType<CreateAuctionRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createAuction>>,
+  TError,
+  { data: BodyType<CreateAuctionRequest> },
+  TContext
+> => {
+  const mutationKey = ["createAuction"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createAuction>>,
+    { data: BodyType<CreateAuctionRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createAuction(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateAuctionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createAuction>>
+>;
+export type CreateAuctionMutationBody = BodyType<CreateAuctionRequest>;
+export type CreateAuctionMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a new auction
+ */
+export const useCreateAuction = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAuction>>,
+    TError,
+    { data: BodyType<CreateAuctionRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createAuction>>,
+  TError,
+  { data: BodyType<CreateAuctionRequest> },
+  TContext
+> => {
+  return useMutation(getCreateAuctionMutationOptions(options));
+};
+
+/**
+ * @summary Get an auction by ID
+ */
+export const getGetAuctionUrl = (id: number) => {
+  return `/api/auctions/${id}`;
+};
+
+export const getAuction = async (
+  id: number,
+  options?: RequestInit,
+): Promise<Auction> => {
+  return customFetch<Auction>(getGetAuctionUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetAuctionQueryKey = (id: number) => {
+  return [`/api/auctions/${id}`] as const;
+};
+
+export const getGetAuctionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAuction>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAuction>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAuctionQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuction>>> = ({
+    signal,
+  }) => getAuction(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAuction>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAuctionQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAuction>>
+>;
+export type GetAuctionQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get an auction by ID
+ */
+
+export function useGetAuction<
+  TData = Awaited<ReturnType<typeof getAuction>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAuction>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAuctionQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Place a bid on an auction
+ */
+export const getPlaceBidUrl = (id: number) => {
+  return `/api/auctions/${id}/bid`;
+};
+
+export const placeBid = async (
+  id: number,
+  placeBidBody: PlaceBidBody,
+  options?: RequestInit,
+): Promise<Bid> => {
+  return customFetch<Bid>(getPlaceBidUrl(id), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(placeBidBody),
+  });
+};
+
+export const getPlaceBidMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof placeBid>>,
+    TError,
+    { id: number; data: BodyType<PlaceBidBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof placeBid>>,
+  TError,
+  { id: number; data: BodyType<PlaceBidBody> },
+  TContext
+> => {
+  const mutationKey = ["placeBid"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof placeBid>>,
+    { id: number; data: BodyType<PlaceBidBody> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return placeBid(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PlaceBidMutationResult = NonNullable<
+  Awaited<ReturnType<typeof placeBid>>
+>;
+export type PlaceBidMutationBody = BodyType<PlaceBidBody>;
+export type PlaceBidMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Place a bid on an auction
+ */
+export const usePlaceBid = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof placeBid>>,
+    TError,
+    { id: number; data: BodyType<PlaceBidBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof placeBid>>,
+  TError,
+  { id: number; data: BodyType<PlaceBidBody> },
+  TContext
+> => {
+  return useMutation(getPlaceBidMutationOptions(options));
+};
+
+/**
+ * @summary Get bids for an auction
+ */
+export const getGetAuctionBidsUrl = (id: number) => {
+  return `/api/auctions/${id}/bids`;
+};
+
+export const getAuctionBids = async (
+  id: number,
+  options?: RequestInit,
+): Promise<Bid[]> => {
+  return customFetch<Bid[]>(getGetAuctionBidsUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetAuctionBidsQueryKey = (id: number) => {
+  return [`/api/auctions/${id}/bids`] as const;
+};
+
+export const getGetAuctionBidsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAuctionBids>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAuctionBids>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAuctionBidsQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuctionBids>>> = ({
+    signal,
+  }) => getAuctionBids(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAuctionBids>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAuctionBidsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAuctionBids>>
+>;
+export type GetAuctionBidsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get bids for an auction
+ */
+
+export function useGetAuctionBids<
+  TData = Awaited<ReturnType<typeof getAuctionBids>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAuctionBids>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAuctionBidsQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary List all staking pools
+ */
+export const getGetStakingPoolsUrl = () => {
+  return `/api/staking/pools`;
+};
+
+export const getStakingPools = async (
+  options?: RequestInit,
+): Promise<StakingPool[]> => {
+  return customFetch<StakingPool[]>(getGetStakingPoolsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetStakingPoolsQueryKey = () => {
+  return [`/api/staking/pools`] as const;
+};
+
+export const getGetStakingPoolsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStakingPools>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getStakingPools>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetStakingPoolsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStakingPools>>> = ({
+    signal,
+  }) => getStakingPools({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStakingPools>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetStakingPoolsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStakingPools>>
+>;
+export type GetStakingPoolsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all staking pools
+ */
+
+export function useGetStakingPools<
+  TData = Awaited<ReturnType<typeof getStakingPools>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getStakingPools>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStakingPoolsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a staking pool
+ */
+export const getCreateStakingPoolUrl = () => {
+  return `/api/staking/pools`;
+};
+
+export const createStakingPool = async (
+  createStakingPoolRequest: CreateStakingPoolRequest,
+  options?: RequestInit,
+): Promise<StakingPool> => {
+  return customFetch<StakingPool>(getCreateStakingPoolUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createStakingPoolRequest),
+  });
+};
+
+export const getCreateStakingPoolMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createStakingPool>>,
+    TError,
+    { data: BodyType<CreateStakingPoolRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createStakingPool>>,
+  TError,
+  { data: BodyType<CreateStakingPoolRequest> },
+  TContext
+> => {
+  const mutationKey = ["createStakingPool"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createStakingPool>>,
+    { data: BodyType<CreateStakingPoolRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createStakingPool(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateStakingPoolMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createStakingPool>>
+>;
+export type CreateStakingPoolMutationBody = BodyType<CreateStakingPoolRequest>;
+export type CreateStakingPoolMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a staking pool
+ */
+export const useCreateStakingPool = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createStakingPool>>,
+    TError,
+    { data: BodyType<CreateStakingPoolRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createStakingPool>>,
+  TError,
+  { data: BodyType<CreateStakingPoolRequest> },
+  TContext
+> => {
+  return useMutation(getCreateStakingPoolMutationOptions(options));
+};
+
+/**
+ * @summary Get a staking pool by ID
+ */
+export const getGetStakingPoolUrl = (id: number) => {
+  return `/api/staking/pools/${id}`;
+};
+
+export const getStakingPool = async (
+  id: number,
+  options?: RequestInit,
+): Promise<StakingPool> => {
+  return customFetch<StakingPool>(getGetStakingPoolUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetStakingPoolQueryKey = (id: number) => {
+  return [`/api/staking/pools/${id}`] as const;
+};
+
+export const getGetStakingPoolQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStakingPool>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStakingPool>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetStakingPoolQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStakingPool>>> = ({
+    signal,
+  }) => getStakingPool(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStakingPool>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetStakingPoolQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStakingPool>>
+>;
+export type GetStakingPoolQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get a staking pool by ID
+ */
+
+export function useGetStakingPool<
+  TData = Awaited<ReturnType<typeof getStakingPool>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStakingPool>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStakingPoolQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Stake tokens in a pool
+ */
+export const getStakeTokensUrl = () => {
+  return `/api/staking/stake`;
+};
+
+export const stakeTokens = async (
+  stakeTokensBody: StakeTokensBody,
+  options?: RequestInit,
+): Promise<StakePosition> => {
+  return customFetch<StakePosition>(getStakeTokensUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(stakeTokensBody),
+  });
+};
+
+export const getStakeTokensMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof stakeTokens>>,
+    TError,
+    { data: BodyType<StakeTokensBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof stakeTokens>>,
+  TError,
+  { data: BodyType<StakeTokensBody> },
+  TContext
+> => {
+  const mutationKey = ["stakeTokens"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof stakeTokens>>,
+    { data: BodyType<StakeTokensBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return stakeTokens(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type StakeTokensMutationResult = NonNullable<
+  Awaited<ReturnType<typeof stakeTokens>>
+>;
+export type StakeTokensMutationBody = BodyType<StakeTokensBody>;
+export type StakeTokensMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Stake tokens in a pool
+ */
+export const useStakeTokens = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof stakeTokens>>,
+    TError,
+    { data: BodyType<StakeTokensBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof stakeTokens>>,
+  TError,
+  { data: BodyType<StakeTokensBody> },
+  TContext
+> => {
+  return useMutation(getStakeTokensMutationOptions(options));
+};
+
+/**
+ * @summary Get all stake positions for a user
+ */
+export const getGetStakePositionsUrl = (walletAddress: string) => {
+  return `/api/staking/positions/${walletAddress}`;
+};
+
+export const getStakePositions = async (
+  walletAddress: string,
+  options?: RequestInit,
+): Promise<StakePosition[]> => {
+  return customFetch<StakePosition[]>(getGetStakePositionsUrl(walletAddress), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetStakePositionsQueryKey = (walletAddress: string) => {
+  return [`/api/staking/positions/${walletAddress}`] as const;
+};
+
+export const getGetStakePositionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStakePositions>>,
+  TError = ErrorType<unknown>,
+>(
+  walletAddress: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStakePositions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetStakePositionsQueryKey(walletAddress);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getStakePositions>>
+  > = ({ signal }) =>
+    getStakePositions(walletAddress, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!walletAddress,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStakePositions>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetStakePositionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStakePositions>>
+>;
+export type GetStakePositionsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get all stake positions for a user
+ */
+
+export function useGetStakePositions<
+  TData = Awaited<ReturnType<typeof getStakePositions>>,
+  TError = ErrorType<unknown>,
+>(
+  walletAddress: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStakePositions>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStakePositionsQueryOptions(walletAddress, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get platform-wide recent activity feed
+ */
+export const getGetActivityUrl = (params?: GetActivityParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/activity?${stringifiedParams}`
+    : `/api/activity`;
+};
+
+export const getActivity = async (
+  params?: GetActivityParams,
+  options?: RequestInit,
+): Promise<ActivityItem[]> => {
+  return customFetch<ActivityItem[]>(getGetActivityUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetActivityQueryKey = (params?: GetActivityParams) => {
+  return [`/api/activity`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetActivityQueryOptions = <
+  TData = Awaited<ReturnType<typeof getActivity>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetActivityParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getActivity>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetActivityQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getActivity>>> = ({
+    signal,
+  }) => getActivity(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getActivity>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetActivityQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getActivity>>
+>;
+export type GetActivityQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get platform-wide recent activity feed
+ */
+
+export function useGetActivity<
+  TData = Awaited<ReturnType<typeof getActivity>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetActivityParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getActivity>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetActivityQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get activity for a specific user
+ */
+export const getGetUserActivityUrl = (
+  walletAddress: string,
+  params?: GetUserActivityParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/activity/${walletAddress}?${stringifiedParams}`
+    : `/api/activity/${walletAddress}`;
+};
+
+export const getUserActivity = async (
+  walletAddress: string,
+  params?: GetUserActivityParams,
+  options?: RequestInit,
+): Promise<ActivityItem[]> => {
+  return customFetch<ActivityItem[]>(
+    getGetUserActivityUrl(walletAddress, params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetUserActivityQueryKey = (
+  walletAddress: string,
+  params?: GetUserActivityParams,
+) => {
+  return [
+    `/api/activity/${walletAddress}`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetUserActivityQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUserActivity>>,
+  TError = ErrorType<unknown>,
+>(
+  walletAddress: string,
+  params?: GetUserActivityParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getUserActivity>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUserActivityQueryKey(walletAddress, params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserActivity>>> = ({
+    signal,
+  }) => getUserActivity(walletAddress, params, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!walletAddress,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUserActivity>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetUserActivityQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUserActivity>>
+>;
+export type GetUserActivityQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get activity for a specific user
+ */
+
+export function useGetUserActivity<
+  TData = Awaited<ReturnType<typeof getUserActivity>>,
+  TError = ErrorType<unknown>,
+>(
+  walletAddress: string,
+  params?: GetUserActivityParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getUserActivity>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUserActivityQueryOptions(
+    walletAddress,
+    params,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get overall platform statistics
+ */
+export const getGetPlatformStatsUrl = () => {
+  return `/api/stats/platform`;
+};
+
+export const getPlatformStats = async (
+  options?: RequestInit,
+): Promise<PlatformStats> => {
+  return customFetch<PlatformStats>(getGetPlatformStatsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetPlatformStatsQueryKey = () => {
+  return [`/api/stats/platform`] as const;
+};
+
+export const getGetPlatformStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPlatformStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getPlatformStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetPlatformStatsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getPlatformStats>>
+  > = ({ signal }) => getPlatformStats({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPlatformStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetPlatformStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPlatformStats>>
+>;
+export type GetPlatformStatsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get overall platform statistics
+ */
+
+export function useGetPlatformStats<
+  TData = Awaited<ReturnType<typeof getPlatformStats>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getPlatformStats>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPlatformStatsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
