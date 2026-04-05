@@ -821,4 +821,168 @@ components:
         createdAt:
           type: string
           format: date-time
-      re
+      required: [id, title, description, assetName, assetType, startingPrice, currentBid, totalBids, status, createdAt]
+
+    CreateAuctionRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        assetName:
+          type: string
+        assetType:
+          type: string
+          enum: [nft, token, physical]
+        startingPrice:
+          type: number
+        projectName:
+          type: string
+          nullable: true
+        endsAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdByWallet:
+          type: string
+      required: [title, description, assetName, assetType, startingPrice, createdByWallet]
+
+    Bid:
+      type: object
+      properties:
+        id:
+          type: integer
+        auctionId:
+          type: integer
+        walletAddress:
+          type: string
+        amount:
+          type: number
+        placedAt:
+          type: string
+          format: date-time
+      required: [id, auctionId, walletAddress, amount, placedAt]
+
+    StakingPool:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        tokenSymbol:
+          type: string
+        apr:
+          type: number
+        minStake:
+          type: number
+        maxStake:
+          type: number
+          nullable: true
+        totalStaked:
+          type: number
+        totalStakers:
+          type: integer
+        durationDays:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          enum: [active, paused, ended]
+        projectName:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, name, description, tokenSymbol, apr, minStake, totalStaked, totalStakers, status, createdAt]
+
+    CreateStakingPoolRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tokenSymbol:
+          type: string
+        apr:
+          type: number
+        minStake:
+          type: number
+        maxStake:
+          type: number
+          nullable: true
+        durationDays:
+          type: integer
+          nullable: true
+        projectName:
+          type: string
+          nullable: true
+        createdByWallet:
+          type: string
+      required: [name, description, tokenSymbol, apr, minStake, createdByWallet]
+
+    StakePosition:
+      type: object
+      properties:
+        id:
+          type: integer
+        poolId:
+          type: integer
+        walletAddress:
+          type: string
+        amount:
+          type: number
+        rewardsEarned:
+          type: number
+        stakedAt:
+          type: string
+          format: date-time
+        pool:
+          $ref: "#/components/schemas/StakingPool"
+      required: [id, poolId, walletAddress, amount, rewardsEarned, stakedAt]
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [quest_completed, raffle_entered, raffle_won, bid_placed, auction_won, staked, unstaked]
+        walletAddress:
+          type: string
+        description:
+          type: string
+        points:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, type, walletAddress, description, createdAt]
+
+    PlatformStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        totalQuests:
+          type: integer
+        totalQuestCompletions:
+          type: integer
+        totalRaffles:
+          type: integer
+        totalAuctions:
+          type: integer
+        totalStakingPools:
+          type: integer
+        totalValueStaked:
+          type: number
+        totalPointsDistributed:
+          type: integer
+      required: [totalUsers, totalQuests, totalQuestCompletions, totalRaffles, totalAuctions, totalStakingPools, totalValueStaked, totalPointsDistributed]
